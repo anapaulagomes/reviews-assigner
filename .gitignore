@@ -11,3 +11,5 @@ __pycache__/
 .tox
 *.deb
 doc/_build/
+.idea
+.cache
