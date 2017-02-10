@@ -2,6 +2,10 @@ import requests
 import os
 
 
+class UnauthorizedToken(Exception):
+    pass
+
+
 class UdacityConnection:
 
     def __init__(self):
@@ -10,6 +14,10 @@ class UdacityConnection:
         self.headers = {'Authorization': token, 'Content-Length': '0'}
 
     def certifications(self):
-        response = requests.get(self.certifications_url, headers=self.headers).json()
-        certifications_list = [item['project_id'] for item in response if item['status'] == 'certified']
-        return certifications_list
+        raw_response = requests.get(self.certifications_url, headers=self.headers)
+        try:
+            response = raw_response.json()
+            certifications_list = [item['project_id'] for item in response if item['status'] == 'certified']
+            return certifications_list
+        except requests.exceptions.HTTPError:
+            raise UnauthorizedToken

@@ -1,5 +1,8 @@
 from .context import hunter
+from hunter import UnauthorizedToken
 import mock
+import pytest
+import requests
 
 
 @mock.patch('hunter.udacity.requests.get')
@@ -31,3 +34,15 @@ def test_retrieve_certification_list_searching_just_for_certified_projects(mock_
 
     udacity = hunter.UdacityConnection()
     assert udacity.certifications() == [145, 14]
+
+
+@mock.patch('hunter.UnauthorizedToken')
+@mock.patch('hunter.udacity.requests.get')
+def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_certifications, mock_http_error_handler):
+    mock_certifications.return_value.json.side_effect = requests.exceptions.HTTPError()
+    mock_http_error_handler.side_effect = UnauthorizedToken()
+
+    udacity = hunter.UdacityConnection()
+
+    with pytest.raises(UnauthorizedToken):
+        udacity.certifications()
