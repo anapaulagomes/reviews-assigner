@@ -38,8 +38,12 @@ def test_retrieve_certification_list_searching_just_for_certified_projects(mock_
 
     mock_certifications.return_value.json.return_value = projects_list
 
+    expected_certifications_list = [145, 14]
+
     udacity = hunter.UdacityConnection()
-    assert udacity.certifications() == [145, 14]
+    certifications_list = udacity.certifications()
+
+    assert certifications_list == expected_certifications_list
 
 
 @mock.patch('hunter.UnauthorizedToken')
