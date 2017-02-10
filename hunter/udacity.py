@@ -21,3 +21,14 @@ class UdacityConnection:
             return certifications_list
         except requests.exceptions.HTTPError:
             raise UnauthorizedToken
+
+    def request_reviews(self, certifications_list):
+        projects = self.__projects(certifications_list)
+        return requests.post('https://review-api.udacity.com/api/v1/submission_requests.json', json=projects, headers=self.headers)
+
+    # TODO Add support to multi language
+    def __projects(self, certifications_list):
+        projects_list = []
+        for certification in certifications_list:
+            projects_list.append({'project_id': certification, 'language': 'pt-br'})
+        return {'projects': projects_list}

@@ -46,3 +46,15 @@ def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_cer
 
     with pytest.raises(UnauthorizedToken):
         udacity.certifications()
+
+
+@mock.patch('hunter.udacity.requests.post')
+def test_create_new_request_with_wanted_projects(mock_request):
+    mock_request.status_code = 200
+
+    fake_certifications_list = [42, 57]
+
+    udacity = hunter.UdacityConnection()
+    response = udacity.request_reviews(fake_certifications_list)
+
+    assert response.status_code is not None
