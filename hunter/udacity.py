@@ -14,8 +14,8 @@ class UdacityConnection:
         self.headers = {'Authorization': token, 'Content-Length': '0'}
 
     def certifications(self):
-        raw_response = requests.get(self.certifications_url, headers=self.headers)
         try:
+            raw_response = requests.get(self.certifications_url, headers=self.headers)
             response = raw_response.json()
             certifications_list = [item['project_id'] for item in response if item['status'] == 'certified']
             return certifications_list
