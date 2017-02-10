@@ -16,7 +16,7 @@ def test_retrieve_certifications_list(mock_certifications):
 
     udacity = hunter.UdacityConnection()
     certifications_list = udacity.certifications()
-    
+
     assert certifications_list == expected_certifications_list
 
 
@@ -25,7 +25,9 @@ def test_retrieve_empty_certifications_list(mock_certifications):
     mock_certifications.return_value.json.return_value = []
 
     udacity = hunter.UdacityConnection()
-    assert udacity.certifications() == []
+    certifications_list = udacity.certifications()
+
+    assert certifications_list == []
 
 
 @mock.patch('hunter.udacity.requests.get')
