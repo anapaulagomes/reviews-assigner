@@ -17,7 +17,7 @@ class ReviewsAPI:
         try:
             raw_response = requests.get(CERTIFICATIONS_URL, headers=self.headers)
             response = raw_response.json()
-            
+
             raw_response.raise_for_status()
 
             certifications_list = [item['project_id'] for item in response if item['status'] == 'certified']
@@ -26,11 +26,11 @@ class ReviewsAPI:
             raise UnauthorizedToken('Maybe it\'s time to change you token!')
 
     def request_reviews(self, certifications_list):
-        projects = self.__projects(certifications_list)
+        projects = self.__format_projects(certifications_list)
         return requests.post(SUBMISSION_REQUESTS, json=projects, headers=self.headers)
 
     # TODO Add support to multi language
-    def __projects(self, certifications_list):
+    def __format_projects(self, certifications_list):
         projects_list = []
         for certification in certifications_list:
             projects_list.append({'project_id': certification, 'language': 'pt-br'})
