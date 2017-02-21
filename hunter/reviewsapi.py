@@ -17,10 +17,13 @@ class ReviewsAPI:
         try:
             raw_response = requests.get(CERTIFICATIONS_URL, headers=self.headers)
             response = raw_response.json()
+            
+            raw_response.raise_for_status()
+
             certifications_list = [item['project_id'] for item in response if item['status'] == 'certified']
             return certifications_list
         except requests.exceptions.HTTPError:
-            raise UnauthorizedToken
+            raise UnauthorizedToken('Maybe it\'s time to change you token!')
 
     def request_reviews(self, certifications_list):
         projects = self.__projects(certifications_list)
