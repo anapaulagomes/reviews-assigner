@@ -11,6 +11,10 @@ Add it as environment variable with the name __UDACITY_AUTH_TOKEN__.
 python3 -m venv venv
 ```
 
+Activating: `source venv/bin/activate`
+
+Deactivating: `source deactivate`
+
 ### Tests
 
 Running tests
