@@ -7,9 +7,7 @@ Add it as environment variable with the name __UDACITY_AUTH_TOKEN__.
 
 ### Creating new environment
 
-```
-python3 -m venv venv
-```
+`python3 -m venv venv`
 
 Activating: `source venv/bin/activate`
 
@@ -19,6 +17,8 @@ Deactivating: `source deactivate`
 
 Running tests
 
-```
-pytest tests
-```
+`pytest tests`
+
+Coverage
+
+`pytest --cov=hunter/ tests`
