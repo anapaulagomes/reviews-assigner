@@ -7,7 +7,7 @@ class UnauthorizedToken(Exception):
     pass
 
 
-class UdacityConnection:
+class ReviewsAPI:
 
     def __init__(self):
         token = os.environ.get('UDACITY_AUTH_TOKEN')

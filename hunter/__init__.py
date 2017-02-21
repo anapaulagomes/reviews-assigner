@@ -1,2 +1,2 @@
-from .udacity import UdacityConnection
-from .udacity import UnauthorizedToken
+from .reviewsapi import ReviewsAPI
+from .reviewsapi import UnauthorizedToken
