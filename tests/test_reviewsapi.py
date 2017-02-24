@@ -57,6 +57,27 @@ def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, re
     assert languages_list == expected_languages_list
 
 
+@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
+def test_should_return_projects_with_certified_languages(mock_certified_languages, reviewsapi):
+    expected_languages = ['en-us', 'zh-cn', 'pt-br']
+    mock_certified_languages.return_value = expected_languages
+    certifications_list = [1, 2, 3]
+    expected_projects_with_languages = {'projects':
+                                        [{'project_id': certifications_list[0], 'language': expected_languages[0]},
+                                        {'project_id': certifications_list[0], 'language': expected_languages[1]},
+                                        {'project_id': certifications_list[0], 'language': expected_languages[2]},
+                                        {'project_id': certifications_list[1], 'language': expected_languages[0]},
+                                        {'project_id': certifications_list[1], 'language': expected_languages[1]},
+                                        {'project_id': certifications_list[1], 'language': expected_languages[2]},
+                                        {'project_id': certifications_list[2], 'language': expected_languages[0]},
+                                        {'project_id': certifications_list[2], 'language': expected_languages[1]},
+                                        {'project_id': certifications_list[2], 'language': expected_languages[2]}]}
+
+    projects_with_languages = reviewsapi.projects_with_languages(certifications_list)
+
+    assert len(projects_with_languages) == len(expected_projects_with_languages)
+
+
 @mock.patch('hunter.UnauthorizedToken')
 @mock.patch('hunter.reviewsapi.requests.get')
 def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_certifications, mock_http_error_handler, reviewsapi):

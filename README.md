@@ -22,3 +22,5 @@ Running tests
 Coverage
 
 `pytest --cov=hunter/ tests`
+
+`flake8 hunter/`
