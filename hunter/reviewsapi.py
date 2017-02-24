@@ -13,7 +13,7 @@ class ReviewsAPI:
         token = os.environ['UDACITY_AUTH_TOKEN']
         self.headers = {'Authorization': token, 'Content-Length': '0'}
 
-    def go_get_them(self, request):
+    def go(self, request):
         try:
             raw_response = request()
             response = raw_response.json()
@@ -28,7 +28,7 @@ class ReviewsAPI:
         return requests.get(CERTIFICATIONS_URL, headers=self.headers)
 
     def certifications(self):
-        response = self.go_get_them(self.request_certifications)
+        response = self.go(self.request_certifications)
         return [item['project_id'] for item in response if item['status'] == 'certified']
 
 
