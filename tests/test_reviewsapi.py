@@ -45,6 +45,18 @@ def test_retrieve_certification_list_searching_just_for_certified_projects(mock_
     assert certifications_list == expected_certifications_list
 
 
+@mock.patch('hunter.reviewsapi.requests.get')
+def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, reviewsapi):
+    languages = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
+
+    mock_review_profile.return_value.ok = True
+    mock_review_profile.return_value.json.return_value = languages
+    expected_languages_list = ['en-us', 'zh-cn', 'pt-br']
+    languages_list = reviewsapi.certified_languages()
+
+    assert languages_list == expected_languages_list
+
+
 @mock.patch('hunter.UnauthorizedToken')
 @mock.patch('hunter.reviewsapi.requests.get')
 def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_certifications, mock_http_error_handler, reviewsapi):

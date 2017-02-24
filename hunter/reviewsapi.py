@@ -10,7 +10,7 @@ class UnauthorizedToken(Exception):
 class ReviewsAPI:
 
     def __init__(self):
-        token = os.environ.get('UDACITY_AUTH_TOKEN')
+        token = os.environ['UDACITY_AUTH_TOKEN']
         self.headers = {'Authorization': token, 'Content-Length': '0'}
 
     def certifications(self):
@@ -22,6 +22,19 @@ class ReviewsAPI:
 
             certifications_list = [item['project_id'] for item in response if item['status'] == 'certified']
             return certifications_list
+        except requests.exceptions.HTTPError:
+            raise UnauthorizedToken('Maybe it\'s time to change you token!')
+
+    def certified_languages(self):
+        try:
+            raw_response = requests.get(REVIEWER_URL, headers=self.headers)
+            response = raw_response.json()
+
+            raw_response.raise_for_status()
+            
+            languages_list = [language for language in response['application']['languages']]
+
+            return languages_list
         except requests.exceptions.HTTPError:
             raise UnauthorizedToken('Maybe it\'s time to change you token!')
 
