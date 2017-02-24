@@ -66,6 +66,16 @@ def test_should_throw_an_exception_when_status_code_is_different_of_2xx(mock_req
         reviewsapi.certifications()
 
 
+@mock.patch('hunter.reviewsapi.requests.get')
+def test_should_throw_an_exception_when_happens_a_network_problem(mock_request, reviewsapi):
+    http_error = requests.exceptions.ConnectionError()
+    mock_request.return_value.ok = False
+    mock_request.return_value.raise_for_status.side_effect = http_error
+
+    with pytest.raises(Exception):
+        reviewsapi.certifications()
+
+
 @mock.patch('hunter.reviewsapi.requests.post')
 def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
     mock_request.return_value.ok = True
