@@ -34,7 +34,7 @@ class ReviewsAPI:
 
     def request_reviews(self, certifications_list):
         projects = self.projects_with_languages(certifications_list)
-        return self.execute(lambda : requests.post(SUBMISSION_REQUESTS, json=projects, headers=self.headers))
+        return self.execute(lambda : requests.post(SUBMISSION_REQUESTS_URL, json=projects, headers=self.headers))
 
     def projects_with_languages(self, certifications_list):
         languages_list = self.certified_languages()
