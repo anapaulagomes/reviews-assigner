@@ -31,19 +31,12 @@ class ReviewsAPI:
         response = self.go(self.request_certifications)
         return [item['project_id'] for item in response if item['status'] == 'certified']
 
+    def request_certified_languages(self):
+        return requests.get(REVIEWER_URL, headers=self.headers)
 
     def certified_languages(self):
-        try:
-            raw_response = requests.get(REVIEWER_URL, headers=self.headers)
-            response = raw_response.json()
-
-            raw_response.raise_for_status()
-
-            languages_list = [language for language in response['application']['languages']]
-
-            return languages_list
-        except requests.exceptions.HTTPError:
-            raise UnauthorizedToken('Maybe it\'s time to change you token!')
+        response = self.go(self.request_certified_languages)
+        return [language for language in response['application']['languages']]
 
     def request_reviews(self, certifications_list):
         projects = self.projects_with_languages(certifications_list)
