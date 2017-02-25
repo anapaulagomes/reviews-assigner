@@ -13,7 +13,7 @@ class ReviewsAPI:
         token = os.environ['UDACITY_AUTH_TOKEN']
         self.headers = {'Authorization': token, 'Content-Length': '0'}
 
-    def go(self, request):
+    def execute(self, request):
         try:
             raw_response = request()
             response = raw_response.json()
@@ -28,14 +28,14 @@ class ReviewsAPI:
         return requests.get(CERTIFICATIONS_URL, headers=self.headers)
 
     def certifications(self):
-        response = self.go(self.request_certifications)
+        response = self.execute(self.request_certifications)
         return [item['project_id'] for item in response if item['status'] == 'certified']
 
     def request_certified_languages(self):
         return requests.get(REVIEWER_URL, headers=self.headers)
 
     def certified_languages(self):
-        response = self.go(self.request_certified_languages)
+        response = self.execute(self.request_certified_languages)
         return [language for language in response['application']['languages']]
 
     def request_submission_requests(self, projects):
@@ -43,7 +43,7 @@ class ReviewsAPI:
 
     def request_reviews(self, certifications_list):
         projects = self.projects_with_languages(certifications_list)
-        return self.go(self.request_submission_requests(projects))
+        return self.execute(self.request_submission_requests(projects))
 
     def projects_with_languages(self, certifications_list):
         languages_list = self.certified_languages()
