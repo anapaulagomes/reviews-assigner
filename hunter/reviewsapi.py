@@ -24,11 +24,8 @@ class ReviewsAPI:
         except requests.exceptions.HTTPError:
             raise UnauthorizedToken('Maybe it\'s time to change you token!')
 
-    def request_certifications(self):
-        return requests.get(CERTIFICATIONS_URL, headers=self.headers)
-
     def certifications(self):
-        response = self.execute(self.request_certifications)
+        response = self.execute(lambda : requests.get(CERTIFICATIONS_URL, headers=self.headers))
         return [item['project_id'] for item in response if item['status'] == 'certified']
 
     def request_certified_languages(self):
