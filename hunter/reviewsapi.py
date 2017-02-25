@@ -28,19 +28,13 @@ class ReviewsAPI:
         response = self.execute(lambda : requests.get(CERTIFICATIONS_URL, headers=self.headers))
         return [item['project_id'] for item in response if item['status'] == 'certified']
 
-    def request_certified_languages(self):
-        return requests.get(REVIEWER_URL, headers=self.headers)
-
     def certified_languages(self):
-        response = self.execute(self.request_certified_languages)
+        response = self.execute(lambda : requests.get(REVIEWER_URL, headers=self.headers))
         return [language for language in response['application']['languages']]
-
-    def request_submission_requests(self, projects):
-        return requests.post(SUBMISSION_REQUESTS, json=projects, headers=self.headers)
 
     def request_reviews(self, certifications_list):
         projects = self.projects_with_languages(certifications_list)
-        return self.execute(self.request_submission_requests(projects))
+        return self.execute(lambda : requests.post(SUBMISSION_REQUESTS, json=projects, headers=self.headers))
 
     def projects_with_languages(self, certifications_list):
         languages_list = self.certified_languages()
