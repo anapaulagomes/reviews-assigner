@@ -38,9 +38,12 @@ class ReviewsAPI:
         response = self.go(self.request_certified_languages)
         return [language for language in response['application']['languages']]
 
+    def request_submission_requests(self, projects):
+        return requests.post(SUBMISSION_REQUESTS, json=projects, headers=self.headers)
+
     def request_reviews(self, certifications_list):
         projects = self.projects_with_languages(certifications_list)
-        return requests.post(SUBMISSION_REQUESTS, json=projects, headers=self.headers)
+        return self.go(self.request_submission_requests(projects))
 
     def projects_with_languages(self, certifications_list):
         languages_list = self.certified_languages()
