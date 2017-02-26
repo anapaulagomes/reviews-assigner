@@ -47,7 +47,7 @@ def test_retrieve_empty_certifications_list(mock_certifications, assigner):
     assert certifications_list == []
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
+@mock.patch('hunter.assigner.Assigner.certified_languages')
 def test_should_return_projects_with_certified_languages(mock_certified_languages, assigner):
     expected_languages = ['en-us', 'zh-cn', 'pt-br']
     mock_certified_languages.return_value = expected_languages
@@ -66,3 +66,21 @@ def test_should_return_projects_with_certified_languages(mock_certified_language
     projects_with_languages = assigner.projects_with_languages(certifications_list)
 
     assert len(projects_with_languages) == len(expected_projects_with_languages)
+
+
+@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
+def test_should_return_certified_languages(mock_certified_languages, assigner):
+    mock_certified_languages.return_value = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
+    expected_certified_languages = ['en-us', 'zh-cn', 'pt-br']
+
+    languages = assigner.certified_languages()
+    assert languages == expected_certified_languages
+
+
+@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
+def test_should_return_empty_list_languages(mock_certified_languages, assigner):
+    mock_certified_languages.return_value = {'application': {'languages': []}}
+    expected_certified_languages = []
+
+    languages = assigner.certified_languages()
+    assert languages == expected_certified_languages

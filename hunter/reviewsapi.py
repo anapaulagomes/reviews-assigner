@@ -28,8 +28,7 @@ class ReviewsAPI:
         return self.execute(lambda:requests.get(CERTIFICATIONS_URL, headers=self.headers))
 
     def certified_languages(self):
-        response = self.execute(lambda:requests.get(REVIEWER_URL, headers=self.headers))
-        return [language for language in response['application']['languages']]
+        return self.execute(lambda:requests.get(REVIEWER_URL, headers=self.headers))
 
     def request_reviews(self, projects):
         return self.execute(lambda:requests.post(SUBMISSION_REQUESTS_URL, json=projects, headers=self.headers))

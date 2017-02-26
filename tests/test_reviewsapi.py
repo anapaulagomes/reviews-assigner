@@ -49,15 +49,14 @@ def test_retrieve_certifications_list(mock_certifications, reviewsapi):
 
 @mock.patch('hunter.reviewsapi.requests.get')
 def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, reviewsapi):
-    languages = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
+    expected_languages_response = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
 
     mock_review_profile.return_value.ok = True
-    mock_review_profile.return_value.json.return_value = languages
-    expected_languages_list = ['en-us', 'zh-cn', 'pt-br']
+    mock_review_profile.return_value.json.return_value = expected_languages_response
     languages_list = reviewsapi.certified_languages()
 
     mock_review_profile.assert_called_once_with(endpoints.REVIEWER_URL, headers=ANY)
-    assert languages_list == expected_languages_list
+    assert languages_list == expected_languages_response
 
 
 @mock.patch('hunter.UnauthorizedToken')
