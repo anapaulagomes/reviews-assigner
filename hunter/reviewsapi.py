@@ -31,12 +31,5 @@ class ReviewsAPI:
         response = self.execute(lambda : requests.get(REVIEWER_URL, headers=self.headers))
         return [language for language in response['application']['languages']]
 
-    def request_reviews(self, certifications_list):
-        projects = self.projects_with_languages(certifications_list)
+    def request_reviews(self, projects):
         return self.execute(lambda : requests.post(SUBMISSION_REQUESTS_URL, json=projects, headers=self.headers))
-
-    def projects_with_languages(self, certifications_list):
-        languages_list = self.certified_languages()
-        projects_list = [{'project_id': project_id, 'language': language} for project_id in certifications_list for language in languages_list]
-
-        return {'projects': projects_list}

@@ -60,27 +60,6 @@ def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, re
     assert languages_list == expected_languages_list
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
-def test_should_return_projects_with_certified_languages(mock_certified_languages, reviewsapi):
-    expected_languages = ['en-us', 'zh-cn', 'pt-br']
-    mock_certified_languages.return_value = expected_languages
-    certifications_list = [1, 2, 3]
-    expected_projects_with_languages = {'projects':
-                                        [{'project_id': certifications_list[0], 'language': expected_languages[0]},
-                                        {'project_id': certifications_list[0], 'language': expected_languages[1]},
-                                        {'project_id': certifications_list[0], 'language': expected_languages[2]},
-                                        {'project_id': certifications_list[1], 'language': expected_languages[0]},
-                                        {'project_id': certifications_list[1], 'language': expected_languages[1]},
-                                        {'project_id': certifications_list[1], 'language': expected_languages[2]},
-                                        {'project_id': certifications_list[2], 'language': expected_languages[0]},
-                                        {'project_id': certifications_list[2], 'language': expected_languages[1]},
-                                        {'project_id': certifications_list[2], 'language': expected_languages[2]}]}
-
-    projects_with_languages = reviewsapi.projects_with_languages(certifications_list)
-
-    assert len(projects_with_languages) == len(expected_projects_with_languages)
-
-
 @mock.patch('hunter.UnauthorizedToken')
 @mock.patch('hunter.reviewsapi.requests.get')
 def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_certifications, mock_http_error_handler, reviewsapi):
@@ -111,15 +90,16 @@ def test_should_throw_an_exception_when_happens_a_network_problem(mock_request, 
     with pytest.raises(Exception):
         reviewsapi.certifications()
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.projects_with_languages')
+
 @mock.patch('hunter.reviewsapi.requests.post')
-def test_create_new_request_with_wanted_projects(mock_request, mock_projects_with_languages, reviewsapi):
-    expected_languages = ['en-us', 'zh-cn', 'pt-br']
-    mock_projects_with_languages.return_value = expected_languages
+def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
+    fake_projects = {'projects':
+                [{'project_id': 1, 'language': 'pt-br'},
+                {'project_id': 2, 'language': 'pt-br'},
+                {'project_id': 3, 'language': 'pt-br'}]}
     mock_request.return_value.ok = True
 
-    fake_certifications_list = [42, 57]
-    response = reviewsapi.request_reviews(fake_certifications_list)
+    response = reviewsapi.request_reviews(fake_projects)
 
-    mock_request.assert_called_once_with(endpoints.SUBMISSION_REQUESTS_URL, headers=ANY, json=ANY)
+    mock_request.assert_called_once_with(endpoints.SUBMISSION_REQUESTS_URL, headers=ANY, json=fake_projects)
     assert response.status_code is not None
