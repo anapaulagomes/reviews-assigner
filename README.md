@@ -1,26 +1,16 @@
-# Review's Hunter
+# Review's Assigner
 
-Hunt some Udacity's revision automatically 🔦 [![Build Status](https://travis-ci.org/anapaulagomes/review-hunter.svg?branch=master)](https://travis-ci.org/anapaulagomes/review-hunter)
+Assign Udacity's revision automatically! 🔦 [![Build Status](https://travis-ci.org/anapaulagomes/review-hunter.svg?branch=master)](https://travis-ci.org/anapaulagomes/review-hunter)
 
 This project is focused on Udacity's reviewer. Considering this, you should have an _auth token_.
-Add it as environment variable with the name __UDACITY_AUTH_TOKEN__.
+Add it as environment variable with the name `UDACITY_AUTH_TOKEN`.
 
 ### Creating new environment
 
-`python3 -m venv venv`
+This project has been developed with Python 3.6 but it's has been tested with versions 2.7 and 3.4.
 
-Activating: `source venv/bin/activate`
-
-Deactivating: `source deactivate`
+To create a new environment execute `python3 -m venv venv`. Make sure to config your _auth token_ in `venv/bin/activate` file. To activate run `source venv/bin/activate` and to deactivate run `source deactivate`.
 
 ### Tests
 
-Running tests
-
-`pytest tests`
-
-Coverage
-
-`pytest --cov=hunter/ tests`
-
-`flake8 hunter/`
+Running tests with _pytest_ it's pretty easy: `pytest tests`. You may check tests coverage with `pytest --cov=hunter/ tests` and the "flakes" (errors) with `flake8 hunter/`.
