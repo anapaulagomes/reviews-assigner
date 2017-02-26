@@ -56,6 +56,7 @@ def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, re
     expected_languages_list = ['en-us', 'zh-cn', 'pt-br']
     languages_list = reviewsapi.certified_languages()
 
+    mock_review_profile.assert_called_once_with(endpoints.REVIEWER_URL, headers=ANY)
     assert languages_list == expected_languages_list
 
 
