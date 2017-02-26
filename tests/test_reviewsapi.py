@@ -1,6 +1,8 @@
 from .context import hunter
 from hunter import UnauthorizedToken
+from hunter import endpoints
 import mock
+from mock import ANY
 import pytest
 import requests
 
@@ -11,38 +13,36 @@ def reviewsapi():
 
 @mock.patch('hunter.reviewsapi.requests.get')
 def test_retrieve_certifications_list(mock_certifications, reviewsapi):
-    projects_list = [{'project_id': 15, 'status': 'certified'},
-                    {'project_id': 14, 'status': 'certified'}]
+    expected_response = [{
+                    "id": 0,
+                    "status": "applied",
+                    "active": True,
+                    "created_at": "string",
+                    "updated_at": "string",
+                    "waitlisted_at": "string",
+                    "certified_at": "string",
+                    "project_id": 0,
+                    "grader_id": 0,
+                    "trainings_count": 0,
+                    "project": {
+                      "id": 0,
+                      "name": "string",
+                      "required_skills": "string",
+                      "awaiting_review_count": 0,
+                      "hashtag": "string",
+                      "visible": True,
+                      "audit_rubric_id": 0
+                    }
+                  }
+                ]
 
     mock_certifications.return_value.ok = True
-    mock_certifications.return_value.json.return_value = projects_list
-    expected_certifications_list = [15, 14]
-    certifications_list = reviewsapi.certifications()
+    mock_certifications.return_value.json.return_value = expected_response
+    
+    certifications_response = reviewsapi.certifications()
 
-    assert certifications_list == expected_certifications_list
-
-
-@mock.patch('hunter.reviewsapi.requests.get')
-def test_retrieve_empty_certifications_list(mock_certifications, reviewsapi):
-    mock_certifications.return_value.ok = True
-    mock_certifications.return_value.json.return_value = []
-    certifications_list = reviewsapi.certifications()
-
-    assert certifications_list == []
-
-
-@mock.patch('hunter.reviewsapi.requests.get')
-def test_retrieve_certification_list_searching_just_for_certified_projects(mock_certifications, reviewsapi):
-    projects_list = [{'project_id': 145, 'status': 'certified'},
-                    {'project_id': 15, 'status': 'applied'},
-                    {'project_id': 14, 'status': 'certified'}]
-
-    mock_certifications.return_value.ok = True
-    mock_certifications.return_value.json.return_value = projects_list
-    expected_certifications_list = [145, 14]
-    certifications_list = reviewsapi.certifications()
-
-    assert certifications_list == expected_certifications_list
+    mock_certifications.assert_called_once_with(endpoints.CERTIFICATIONS_URL, headers=ANY)
+    assert certifications_response == expected_response
 
 
 @mock.patch('hunter.reviewsapi.requests.get')

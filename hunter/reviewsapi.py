@@ -25,8 +25,7 @@ class ReviewsAPI:
             raise UnauthorizedToken('Maybe it\'s time to change you token!')
 
     def certifications(self):
-        response = self.execute(lambda : requests.get(CERTIFICATIONS_URL, headers=self.headers))
-        return [item['project_id'] for item in response if item['status'] == 'certified']
+        return self.execute(lambda : requests.get(CERTIFICATIONS_URL, headers=self.headers))
 
     def certified_languages(self):
         response = self.execute(lambda : requests.get(REVIEWER_URL, headers=self.headers))
