@@ -22,7 +22,7 @@ class ReviewsAPI:
 
             return response
         except requests.exceptions.HTTPError:
-            raise UnauthorizedToken('Maybe it\'s time to change you token!')
+            raise UnauthorizedToken('Maybe it\'s time to change your token!')
 
     def certifications(self):
         return self.execute(lambda : requests.get(CERTIFICATIONS_URL, headers=self.headers))
