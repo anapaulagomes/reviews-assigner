@@ -1,11 +1,13 @@
 from .context import hunter
 from hunter import UnauthorizedToken
+import os
 import mock
 import pytest
 
 
 @pytest.fixture()
 def assigner():
+    os.environ['UDACITY_AUTH_TOKEN'] = 'some auth token'
     yield hunter.Assigner()
 
 

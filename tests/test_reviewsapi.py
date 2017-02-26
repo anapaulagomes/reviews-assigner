@@ -1,6 +1,7 @@
 from .context import hunter
 from hunter import UnauthorizedToken
 from hunter import endpoints
+import os
 import mock
 from mock import ANY
 import pytest
@@ -9,7 +10,9 @@ import requests
 
 @pytest.fixture()
 def reviewsapi():
+    os.environ['UDACITY_AUTH_TOKEN'] = 'some auth token'
     yield hunter.ReviewsAPI()
+
 
 @mock.patch('hunter.reviewsapi.requests.get')
 def test_retrieve_certifications_list(mock_certifications, reviewsapi):
@@ -38,7 +41,6 @@ def test_retrieve_certifications_list(mock_certifications, reviewsapi):
 
     mock_certifications.return_value.ok = True
     mock_certifications.return_value.json.return_value = expected_response
-    
     certifications_response = reviewsapi.certifications()
 
     mock_certifications.assert_called_once_with(endpoints.CERTIFICATIONS_URL, headers=ANY)
@@ -108,11 +110,15 @@ def test_should_throw_an_exception_when_happens_a_network_problem(mock_request, 
     with pytest.raises(Exception):
         reviewsapi.certifications()
 
-
+@mock.patch('hunter.reviewsapi.ReviewsAPI.projects_with_languages')
 @mock.patch('hunter.reviewsapi.requests.post')
-def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
+def test_create_new_request_with_wanted_projects(mock_request, mock_projects_with_languages, reviewsapi):
+    expected_languages = ['en-us', 'zh-cn', 'pt-br']
+    mock_projects_with_languages.return_value = expected_languages
     mock_request.return_value.ok = True
+
     fake_certifications_list = [42, 57]
     response = reviewsapi.request_reviews(fake_certifications_list)
 
+    mock_request.assert_called_once_with(endpoints.SUBMISSION_REQUESTS_URL, headers=ANY, json=ANY)
     assert response.status_code is not None
