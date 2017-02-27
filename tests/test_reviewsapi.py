@@ -1,6 +1,6 @@
-from .context import hunter
-from hunter import UnauthorizedToken
-from hunter import endpoints
+from .context import revas
+from revas import UnauthorizedToken
+from revas import endpoints
 import os
 import mock
 from mock import ANY
@@ -11,10 +11,10 @@ import requests
 @pytest.fixture()
 def reviewsapi():
     os.environ['UDACITY_AUTH_TOKEN'] = 'some auth token'
-    yield hunter.ReviewsAPI()
+    yield revas.ReviewsAPI()
 
 
-@mock.patch('hunter.reviewsapi.requests.get')
+@mock.patch('revas.reviewsapi.requests.get')
 def test_retrieve_certifications_list(mock_certifications, reviewsapi):
     expected_response = [{
                     "id": 0,
@@ -47,7 +47,7 @@ def test_retrieve_certifications_list(mock_certifications, reviewsapi):
     assert certifications_response == expected_response
 
 
-@mock.patch('hunter.reviewsapi.requests.get')
+@mock.patch('revas.reviewsapi.requests.get')
 def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, reviewsapi):
     expected_languages_response = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
 
@@ -59,8 +59,8 @@ def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, re
     assert languages_list == expected_languages_response
 
 
-@mock.patch('hunter.UnauthorizedToken')
-@mock.patch('hunter.reviewsapi.requests.get')
+@mock.patch('revas.UnauthorizedToken')
+@mock.patch('revas.reviewsapi.requests.get')
 def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_certifications, mock_http_error_handler, reviewsapi):
     mock_certifications.return_value.ok = False
     mock_certifications.return_value.json.side_effect = requests.exceptions.HTTPError()
@@ -70,7 +70,7 @@ def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_cer
         reviewsapi.certifications()
 
 
-@mock.patch('hunter.reviewsapi.requests.get')
+@mock.patch('revas.reviewsapi.requests.get')
 def test_should_throw_an_exception_when_status_code_is_different_of_2xx(mock_request, reviewsapi):
     http_error = requests.exceptions.HTTPError()
     mock_request.return_value.ok = False
@@ -80,7 +80,7 @@ def test_should_throw_an_exception_when_status_code_is_different_of_2xx(mock_req
         reviewsapi.certifications()
 
 
-@mock.patch('hunter.reviewsapi.requests.get')
+@mock.patch('revas.reviewsapi.requests.get')
 def test_should_throw_an_exception_when_happens_a_network_problem(mock_request, reviewsapi):
     http_error = requests.exceptions.ConnectionError()
     mock_request.return_value.ok = False
@@ -90,7 +90,7 @@ def test_should_throw_an_exception_when_happens_a_network_problem(mock_request, 
         reviewsapi.certifications()
 
 
-@mock.patch('hunter.reviewsapi.requests.post')
+@mock.patch('revas.reviewsapi.requests.post')
 def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
     fake_projects = {'projects':
                 [{'project_id': 1, 'language': 'pt-br'},

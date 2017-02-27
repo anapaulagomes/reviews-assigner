@@ -1,5 +1,5 @@
-from .context import hunter
-from hunter import UnauthorizedToken
+from .context import revas
+from revas import UnauthorizedToken
 import os
 import mock
 import pytest
@@ -8,10 +8,10 @@ import pytest
 @pytest.fixture()
 def assigner():
     os.environ['UDACITY_AUTH_TOKEN'] = 'some auth token'
-    yield hunter.Assigner()
+    yield revas.Assigner()
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certifications')
+@mock.patch('revas.reviewsapi.ReviewsAPI.certifications')
 def test_retrieve_certifications_list(mock_certifications, assigner):
     projects_list = [{'project_id': 15, 'status': 'certified'},
                     {'project_id': 14, 'status': 'certified'}]
@@ -24,7 +24,7 @@ def test_retrieve_certifications_list(mock_certifications, assigner):
     assert certifications_list == expected_certifications_list
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certifications')
+@mock.patch('revas.reviewsapi.ReviewsAPI.certifications')
 def test_retrieve_certification_list_searching_just_for_certified_projects(mock_certifications, assigner):
     projects_list = [{'project_id': 145, 'status': 'certified'},
                     {'project_id': 15, 'status': 'applied'},
@@ -38,7 +38,7 @@ def test_retrieve_certification_list_searching_just_for_certified_projects(mock_
     assert certifications_list == expected_certifications_list
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certifications')
+@mock.patch('revas.reviewsapi.ReviewsAPI.certifications')
 def test_raise_an_exception_when_return_empty_certifications_list(mock_certifications, assigner):
     mock_certifications.return_value.ok = True
     mock_certifications.return_value = []
@@ -47,7 +47,7 @@ def test_raise_an_exception_when_return_empty_certifications_list(mock_certifica
         assigner.certifications()
 
 
-@mock.patch('hunter.assigner.Assigner.certified_languages')
+@mock.patch('revas.assigner.Assigner.certified_languages')
 def test_should_return_projects_with_certified_languages(mock_certified_languages, assigner):
     expected_languages = ['en-us', 'zh-cn', 'pt-br']
     mock_certified_languages.return_value.ok = True
@@ -69,7 +69,7 @@ def test_should_return_projects_with_certified_languages(mock_certified_language
     assert len(projects_with_languages) == len(expected_projects_with_languages)
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
+@mock.patch('revas.reviewsapi.ReviewsAPI.certified_languages')
 def test_should_return_certified_languages(mock_certified_languages, assigner):
     mock_certified_languages.return_value.ok = True
     mock_certified_languages.return_value = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
@@ -79,7 +79,7 @@ def test_should_return_certified_languages(mock_certified_languages, assigner):
     assert languages == expected_certified_languages
 
 
-@mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
+@mock.patch('revas.reviewsapi.ReviewsAPI.certified_languages')
 def test_raise_an_exception_when_return_empty_certified_languages_list(mock_certified_languages, assigner):
     mock_certified_languages.return_value.ok = True
     mock_certified_languages.return_value = {'application': {'languages': []}}
