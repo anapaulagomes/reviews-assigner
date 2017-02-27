@@ -42,9 +42,9 @@ def test_retrieve_certification_list_searching_just_for_certified_projects(mock_
 def test_retrieve_empty_certifications_list(mock_certifications, assigner):
     mock_certifications.return_value.ok = True
     mock_certifications.return_value = []
-    certifications_list = assigner.certifications()
 
-    assert certifications_list == []
+    with pytest.raises(Exception):
+        assigner.certifications()
 
 
 @mock.patch('hunter.assigner.Assigner.certified_languages')

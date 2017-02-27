@@ -8,7 +8,11 @@ class Assigner:
 
     def certifications(self):
         response = self.reviewsapi.certifications()
-        return [item['project_id'] for item in response if item['status'] == 'certified']
+
+        if len(response) < 1:
+            raise Exception('You don\'t have any certified project!')
+        else:
+            return [item['project_id'] for item in response if item['status'] == 'certified']
 
     def projects_with_languages(self, certifications):
         languages = self.certified_languages()
