@@ -39,7 +39,7 @@ def test_retrieve_certification_list_searching_just_for_certified_projects(mock_
 
 
 @mock.patch('hunter.reviewsapi.ReviewsAPI.certifications')
-def test_retrieve_empty_certifications_list(mock_certifications, assigner):
+def test_raise_an_exception_when_return_empty_certifications_list(mock_certifications, assigner):
     mock_certifications.return_value.ok = True
     mock_certifications.return_value = []
 
