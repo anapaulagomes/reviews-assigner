@@ -22,4 +22,8 @@ class Assigner:
 
     def certified_languages(self):
         response = self.reviewsapi.certified_languages()
-        return [language for language in response['application']['languages']]
+
+        if len(response['application']['languages']) < 1:
+            raise Exception('You don\'t have any certified languages!')
+        else:
+            return [language for language in response['application']['languages']]

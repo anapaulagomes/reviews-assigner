@@ -50,6 +50,7 @@ def test_raise_an_exception_when_return_empty_certifications_list(mock_certifica
 @mock.patch('hunter.assigner.Assigner.certified_languages')
 def test_should_return_projects_with_certified_languages(mock_certified_languages, assigner):
     expected_languages = ['en-us', 'zh-cn', 'pt-br']
+    mock_certified_languages.return_value.ok = True
     mock_certified_languages.return_value = expected_languages
     certifications_list = [1, 2, 3]
     expected_projects_with_languages = {'projects':
@@ -70,6 +71,7 @@ def test_should_return_projects_with_certified_languages(mock_certified_language
 
 @mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
 def test_should_return_certified_languages(mock_certified_languages, assigner):
+    mock_certified_languages.return_value.ok = True
     mock_certified_languages.return_value = {'application': {'languages': ['en-us', 'zh-cn', 'pt-br']}}
     expected_certified_languages = ['en-us', 'zh-cn', 'pt-br']
 
@@ -78,9 +80,9 @@ def test_should_return_certified_languages(mock_certified_languages, assigner):
 
 
 @mock.patch('hunter.reviewsapi.ReviewsAPI.certified_languages')
-def test_should_return_empty_list_languages(mock_certified_languages, assigner):
+def test_raise_an_exception_when_return_empty_certified_languages_list(mock_certified_languages, assigner):
+    mock_certified_languages.return_value.ok = True
     mock_certified_languages.return_value = {'application': {'languages': []}}
-    expected_certified_languages = []
 
-    languages = assigner.certified_languages()
-    assert languages == expected_certified_languages
+    with pytest.raises(Exception):
+        assigner.certified_languages()
