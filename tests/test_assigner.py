@@ -102,3 +102,34 @@ def test_return_true_when_has_less_than_the_limit_of_projects_in_review(mock_ass
     answer = assigner.has_less_than_the_limit_of_projects_in_review()
 
     assert answer is True
+
+@mock.patch('revas.reviewsapi.ReviewsAPI.submission_requests')
+def test_verify_which_active_submission_requests_the_reviewer_has(mock_submission_requests, assigner):
+    expected_submission_request_response = [{
+        'id': 29,
+        'user_id': 1938,
+        'status': 'fulfilled',
+        'closed_at': '2016-03-16T10:35:58.841Z',
+        'created_at': '2016-03-16T10:25:58.841Z',
+        'submission_id': 109341,
+        'updated_at': '2016-03-16T10:35:58.841Z',
+        'submission_request_projects': [
+          { 'project_id': 42, 'language': 'en-us' },
+          { 'project_id': 57, 'language': 'pt-br' }
+        ]
+      }]
+    mock_submission_requests.return_value = expected_submission_request_response
+
+    active_requests = assigner.active_submission_requests()
+
+    assert active_requests == expected_submission_request_response
+
+
+@mock.patch('revas.reviewsapi.ReviewsAPI.submission_requests')
+def test_return_an_empty_list_when_there_are_none_active_submission_requests(mock_submission_requests, assigner):
+    expected_submission_request_response = []
+    mock_submission_requests.return_value = expected_submission_request_response
+
+    active_requests = assigner.active_submission_requests()
+
+    assert active_requests == expected_submission_request_response

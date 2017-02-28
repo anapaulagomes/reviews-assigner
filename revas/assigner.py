@@ -37,3 +37,6 @@ class Assigner:
             return True
         else:
             return False
+
+    def active_submission_requests(self):
+        return self.reviewsapi.submission_requests()
