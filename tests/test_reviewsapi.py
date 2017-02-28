@@ -17,24 +17,24 @@ def reviewsapi():
 @mock.patch('revas.reviewsapi.requests.get')
 def test_retrieve_certifications_list(mock_certifications, reviewsapi):
     expected_response = [{
-                    "id": 0,
-                    "status": "applied",
-                    "active": True,
-                    "created_at": "string",
-                    "updated_at": "string",
-                    "waitlisted_at": "string",
-                    "certified_at": "string",
-                    "project_id": 0,
-                    "grader_id": 0,
-                    "trainings_count": 0,
-                    "project": {
-                      "id": 0,
-                      "name": "string",
-                      "required_skills": "string",
-                      "awaiting_review_count": 0,
-                      "hashtag": "string",
-                      "visible": True,
-                      "audit_rubric_id": 0
+                    'id': 0,
+                    'status': 'applied',
+                    'active': True,
+                    'created_at': 'string',
+                    'updated_at': 'string',
+                    'waitlisted_at': 'string',
+                    'certified_at': 'string',
+                    'project_id': 0,
+                    'grader_id': 0,
+                    'trainings_count': 0,
+                    'project': {
+                      'id': 0,
+                      'name': 'string',
+                      'required_skills': 'string',
+                      'awaiting_review_count': 0,
+                      'hashtag': 'string',
+                      'visible': True,
+                      'audit_rubric_id': 0
                     }
                   }
                 ]
@@ -43,7 +43,7 @@ def test_retrieve_certifications_list(mock_certifications, reviewsapi):
     mock_certifications.return_value.json.return_value = expected_response
     certifications_response = reviewsapi.certifications()
 
-    mock_certifications.assert_called_once_with(endpoints.CERTIFICATIONS_URL, headers=ANY)
+    mock_certifications.assert_called_once_with(endpoints.CERTIFICATIONS, headers=ANY)
     assert certifications_response == expected_response
 
 
@@ -55,7 +55,7 @@ def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, re
     mock_review_profile.return_value.json.return_value = expected_languages_response
     languages_list = reviewsapi.certified_languages()
 
-    mock_review_profile.assert_called_once_with(endpoints.REVIEWER_URL, headers=ANY)
+    mock_review_profile.assert_called_once_with(endpoints.REVIEWER, headers=ANY)
     assert languages_list == expected_languages_response
 
 
@@ -100,7 +100,7 @@ def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
 
     response = reviewsapi.request_reviews(fake_projects)
 
-    mock_request.assert_called_once_with(endpoints.SUBMISSION_REQUESTS_URL, headers=ANY, json=fake_projects)
+    mock_request.assert_called_once_with(endpoints.NEW_SUBMISSION_REQUESTS, headers=ANY, json=fake_projects)
     assert response.status_code is not None
 
 
