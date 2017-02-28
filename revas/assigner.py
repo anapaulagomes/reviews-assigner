@@ -40,3 +40,9 @@ class Assigner:
 
     def active_submission_requests(self):
         return self.reviewsapi.submission_requests()
+
+    def assigned_to_new_review(self, active_requests):
+        for active_request in active_requests:
+            if active_request['status'] == 'fulfilled':
+                return True
+        return False
