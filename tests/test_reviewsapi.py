@@ -102,3 +102,15 @@ def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
 
     mock_request.assert_called_once_with(endpoints.SUBMISSION_REQUESTS_URL, headers=ANY, json=fake_projects)
     assert response.status_code is not None
+
+
+@mock.patch('revas.reviewsapi.requests.get')
+def test_retrieve_the_number_of_current_assigned_projects(mock_assigned_count, reviewsapi):
+    expected_assigned_count = {'assigned_count': 0}
+    mock_assigned_count.return_value.ok = True
+    mock_assigned_count.return_value.json.return_value = expected_assigned_count
+
+    assigned_count_response = reviewsapi.assigned_count()
+
+    mock_assigned_count.assert_called_once_with(endpoints.ASSIGNED_COUNT, headers=ANY)
+    assert assigned_count_response == expected_assigned_count

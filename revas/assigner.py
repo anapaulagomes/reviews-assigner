@@ -27,3 +27,13 @@ class Assigner:
             raise Exception('You don\'t have any certified languages!')
         else:
             return [language for language in response['application']['languages']]
+
+    def has_less_than_the_limit_of_projects_in_review(self):
+        limit_of_projects = 2
+        response = self.reviewsapi.assigned_count()
+        in_review = response['assigned_count']
+
+        if in_review < limit_of_projects:
+            return True
+        else:
+            return False

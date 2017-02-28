@@ -86,3 +86,19 @@ def test_raise_an_exception_when_return_empty_certified_languages_list(mock_cert
 
     with pytest.raises(Exception):
         assigner.certified_languages()
+
+
+@mock.patch('revas.reviewsapi.ReviewsAPI.assigned_count')
+def test_return_false_when_has_less_than_the_limit_of_projects_in_review(mock_assigned_count, assigner):
+    mock_assigned_count.return_value = {'assigned_count': 2}
+    answer = assigner.has_less_than_the_limit_of_projects_in_review()
+
+    assert answer is False
+
+
+@mock.patch('revas.reviewsapi.ReviewsAPI.assigned_count')
+def test_return_true_when_has_less_than_the_limit_of_projects_in_review(mock_assigned_count, assigner):
+    mock_assigned_count.return_value = {'assigned_count': 1}
+    answer = assigner.has_less_than_the_limit_of_projects_in_review()
+
+    assert answer is True
