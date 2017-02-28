@@ -25,13 +25,13 @@ class ReviewsAPI:
             raise UnauthorizedToken('Maybe it\'s time to change your token!')
 
     def certifications(self):
-        return self.execute(lambda: requests.get(CERTIFICATIONS_URL, headers=self.headers))
+        return self.execute(lambda: requests.get(CERTIFICATIONS, headers=self.headers))
 
     def certified_languages(self):
-        return self.execute(lambda: requests.get(REVIEWER_URL, headers=self.headers))
+        return self.execute(lambda: requests.get(REVIEWER, headers=self.headers))
 
     def request_reviews(self, projects):
-        return self.execute(lambda: requests.post(SUBMISSION_REQUESTS_URL, headers=self.headers, json=projects))
+        return self.execute(lambda: requests.post(NEW_SUBMISSION_REQUESTS, headers=self.headers, json=projects))
 
     def assigned_count(self):
         return self.execute(lambda: requests.get(ASSIGNED_COUNT, headers=self.headers))
