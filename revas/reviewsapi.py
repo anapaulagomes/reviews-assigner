@@ -35,3 +35,6 @@ class ReviewsAPI:
 
     def assigned_count(self):
         return self.execute(lambda: requests.get(ASSIGNED_COUNT, headers=self.headers))
+
+    def submission_requests(self):
+        return self.execute(lambda: requests.get(SUBMISSION_REQUESTS, headers=self.headers))

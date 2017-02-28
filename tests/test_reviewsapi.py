@@ -114,3 +114,27 @@ def test_retrieve_the_number_of_current_assigned_projects(mock_assigned_count, r
 
     mock_assigned_count.assert_called_once_with(endpoints.ASSIGNED_COUNT, headers=ANY)
     assert assigned_count_response == expected_assigned_count
+
+    
+@mock.patch('revas.reviewsapi.requests.get')
+def test_get_the_active_submission_requests(mock_submission_requests, reviewsapi):
+    expected_submission_requests_response = [{
+        'id': 0,
+        'user_id': 0,
+        'status': 'available',
+        'closed_at': 'string',
+        'created_at': 'string',
+        'submission_id': 0,
+        'updated_at': 'string',
+        'submission_request_projects': [{
+            'project_id': 0,
+            'language': 'en-us'
+          }]
+      }]
+    mock_submission_requests.return_value.ok = True
+    mock_submission_requests.return_value.json.return_value = expected_submission_requests_response
+
+    submission_requests_response = reviewsapi.submission_requests()
+
+    mock_submission_requests.assert_called_once_with(endpoints.SUBMISSION_REQUESTS, headers=ANY)
+    assert submission_requests_response == expected_submission_requests_response
