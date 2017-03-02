@@ -139,18 +139,6 @@ def test_return_true_if_user_was_assigned_to_a_new_review(assigner):
     active_requests = [{
         'id': 29,
         'user_id': 1938,
-        'status': 'available',
-        'closed_at': '2016-03-16T10:35:58.841Z',
-        'created_at': '2016-03-16T10:25:58.841Z',
-        'submission_id': 109341,
-        'updated_at': '2016-03-16T10:35:58.841Z',
-        'submission_request_projects': [
-          { 'project_id': 42, 'language': 'en-us' },
-          { 'project_id': 57, 'language': 'pt-br' }
-        ]
-      },{
-        'id': 29,
-        'user_id': 1938,
         'status': 'fulfilled',
         'closed_at': '2016-03-16T10:35:58.841Z',
         'created_at': '2016-03-16T10:25:58.841Z',
@@ -168,18 +156,6 @@ def test_return_true_if_user_was_assigned_to_a_new_review(assigner):
 
 def test_return_false_if_user_was_not_assigned_to_a_new_review(assigner):
     active_requests = [{
-        'id': 29,
-        'user_id': 1938,
-        'status': 'available',
-        'closed_at': '2016-03-16T10:35:58.841Z',
-        'created_at': '2016-03-16T10:25:58.841Z',
-        'submission_id': 109341,
-        'updated_at': '2016-03-16T10:35:58.841Z',
-        'submission_request_projects': [
-          { 'project_id': 42, 'language': 'en-us' },
-          { 'project_id': 57, 'language': 'pt-br' }
-        ]
-      },{
         'id': 29,
         'user_id': 1938,
         'status': 'available',
