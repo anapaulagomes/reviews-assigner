@@ -33,10 +33,7 @@ class Assigner:
         response = self.reviewsapi.assigned_count()
         in_review = response['assigned_count']
 
-        if in_review < limit_of_projects:
-            return True
-        else:
-            return False
+        return in_review < limit_of_projects
 
     def active_submission_requests(self):
         return self.reviewsapi.submission_requests()
