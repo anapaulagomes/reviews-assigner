@@ -14,3 +14,4 @@ doc/_build/
 .idea
 .cache
 .coverage
+.python-version
