@@ -1,5 +1,5 @@
-from .context import revas
-from revas import UnauthorizedToken
+from revas.reviewsapi import ReviewsAPI
+from revas.reviewsapi import UnauthorizedToken
 from revas import endpoints
 import os
 import mock
@@ -11,7 +11,7 @@ import requests
 @pytest.fixture()
 def reviewsapi():
     os.environ['UDACITY_AUTH_TOKEN'] = 'some auth token'
-    yield revas.ReviewsAPI()
+    yield ReviewsAPI()
 
 
 @mock.patch('revas.reviewsapi.requests.get')
@@ -59,7 +59,7 @@ def test_retrieve_certified_languages_to_perform_reviews(mock_review_profile, re
     assert languages_list == expected_languages_response
 
 
-@mock.patch('revas.UnauthorizedToken')
+@mock.patch('revas.reviewsapi.UnauthorizedToken')
 @mock.patch('revas.reviewsapi.requests.get')
 def test_unauthorized_url_access_when_try_access_to_certifications_list(mock_certifications, mock_http_error_handler, reviewsapi):
     mock_certifications.return_value.ok = False
@@ -115,7 +115,7 @@ def test_retrieve_the_number_of_current_assigned_projects(mock_assigned_count, r
     mock_assigned_count.assert_called_once_with(endpoints.ASSIGNED_COUNT, headers=ANY)
     assert assigned_count_response == expected_assigned_count
 
-    
+
 @mock.patch('revas.reviewsapi.requests.get')
 def test_get_the_active_submission_requests(mock_submission_requests, reviewsapi):
     expected_submission_requests_response = [{
@@ -138,3 +138,40 @@ def test_get_the_active_submission_requests(mock_submission_requests, reviewsapi
 
     mock_submission_requests.assert_called_once_with(endpoints.SUBMISSION_REQUESTS, headers=ANY)
     assert submission_requests_response == expected_submission_requests_response
+
+
+@mock.patch('revas.reviewsapi.requests.put')
+def test_create_new_request_with_wanted_projects(mock_request, reviewsapi):
+    mock_request.return_value.ok = True
+    request_id = 272922
+    response = reviewsapi.refresh_request(request_id)
+    expected_response = {
+    	'id': 272922,
+    	'user_id': 38836,
+    	'submission_id': 471150,
+    	'closed_at': '2017-04-29T18:40:41.073Z',
+    	'created_at': '2017-04-29T18:40:40.909Z',
+    	'updated_at': '2017-04-29T18:40:41.077Z',
+    	'status': 'fulfilled',
+    	'submission_request_projects': [{
+    		'project_id': 83,
+    		'language': 'pt-br'
+    	}, {
+    		'project_id': 8,
+    		'language': 'pt-br'
+    	}, {
+    		'project_id': 47,
+    		'language': 'pt-br'
+    	}, {
+    		'project_id': 151,
+    		'language': 'pt-br'
+    	}, {
+    		'project_id': 134,
+    		'language': 'pt-br'
+    	}, {
+    		'project_id': 145,
+    		'language': 'pt-br'
+    	}]
+    }
+    mock_request.return_value = expected_response
+    mock_request.assert_called_once_with(endpoints.REQUEST_REFRESH.format(endpoints.BASE_URL, request_id), headers=ANY)

@@ -1,6 +1,6 @@
 import requests
 import os
-from endpoints import *
+from revas.endpoints import *
 import sys
 import traceback
 
@@ -18,6 +18,7 @@ class ReviewsAPI:
     def execute(self, request):
         try:
             raw_response = request()
+            # TODO before raise an exception to verify if there is a {'error': 'message'}
             response = raw_response.json()
             raw_response.raise_for_status()
 
@@ -40,3 +41,6 @@ class ReviewsAPI:
 
     def submission_requests(self):
         return self.execute(lambda: requests.get(SUBMISSION_REQUESTS, headers=self.headers))
+
+    def refresh_request(self, request_id):
+        return self.execute(lambda: requests.put(REQUEST_REFRESH.format(BASE_URL, request_id), headers=self.headers))
