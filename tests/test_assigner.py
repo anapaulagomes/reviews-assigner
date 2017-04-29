@@ -1,5 +1,4 @@
-from .context import revas
-from revas import UnauthorizedToken
+from revas.assigner import Assigner
 import os
 import mock
 import pytest
@@ -8,7 +7,7 @@ import pytest
 @pytest.fixture()
 def assigner():
     os.environ['UDACITY_AUTH_TOKEN'] = 'some auth token'
-    yield revas.Assigner()
+    yield Assigner()
 
 
 @mock.patch('revas.reviewsapi.ReviewsAPI.certifications')
