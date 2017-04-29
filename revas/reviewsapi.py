@@ -1,6 +1,8 @@
 import requests
 import os
-from .endpoints import *
+from endpoints import *
+import sys
+import traceback
 
 
 class UnauthorizedToken(Exception):
@@ -17,11 +19,11 @@ class ReviewsAPI:
         try:
             raw_response = request()
             response = raw_response.json()
-
             raw_response.raise_for_status()
 
             return response
         except requests.exceptions.HTTPError:
+            print('Error opening %s: %s || %s' % (sys.exc_info()[0], sys.exc_info()[1], traceback.format_exc()))
             raise UnauthorizedToken('Maybe it\'s time to change your token!')
 
     def certifications(self):
