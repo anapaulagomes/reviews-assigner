@@ -16,3 +16,7 @@ To create a new environment execute `python3 -m venv venv`. Make sure to config 
 Running tests with _pytest_ it's pretty easy: `pytest tests`. You may check tests coverage with `pytest --cov=revas/ tests` and the "flakes" (errors) with `flake8 revas/`.
 
 You can perform search on API using: `curl -X GET -H "Authorization: $UDACITY_AUTH_TOKEN" -H "Content-Length: 0" https://review-api.udacity.com/api/v1/me/submission_requests.json`
+
+To create a new request:
+
+```curl -X POST -H "Authorization: $UDACITY_AUTH_TOKEN" --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"projects": [{"project_id": 145, "language": "pt"}, {"project_id": 134, "language": "pt"}, {"project_id": 151, "language": "pt"}, {"project_id": 47, "language": "pt"}, {"project_id": 8, "language": "pt"}, {"project_id": 83, "language": "pt"}]}' 'https://review-api.udacity.com/api/v1/submission_requests'```
