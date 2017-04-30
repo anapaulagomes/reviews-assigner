@@ -1,0 +1,7 @@
+Error opening <class 'requests.exceptions.HTTPError'>: 400 Client Error: Bad Request for url: https://review-api.udacity.com/api/v1/submission_requests.json || Traceback (most recent call last):
+  File "/Users/anapaula/workspace/reviews-assigner/revas/reviewsapi.py", line 22, in execute
+    raw_response.raise_for_status()
+  File "/Users/anapaula/.virtualenvs/env36/lib/python3.6/site-packages/requests/models.py", line 893, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://review-api.udacity.com/api/v1/submission_requests.json
+
