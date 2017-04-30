@@ -1,0 +1,9 @@
+- To create complete flow to request new reviews
+- Log the application
+- Add feature to send emails related to new reviews or errors
+- Rename from `to` to `for`
+- Change the order of real and expected on tests
+- Use CMD
+- Add logging (and monitoring)
+- Error already exists {"error": "request already exists"}
+- Error {"error":"request must have at least one valid project/language pair"}
