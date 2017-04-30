@@ -1,5 +1,6 @@
 from revas.assigner import Assigner
 import os
+import datetime
 import mock
 import pytest
 
@@ -170,3 +171,17 @@ def test_return_false_if_user_was_not_assigned_to_a_new_review(assigner):
     assigned = assigner.assigned_to_new_review(active_requests)
 
     assert assigned is False
+
+
+def test_return_true_if_a_request_have_more_than_one_hour_of_life_and_it_needs_refresh(assigner):
+    active_requests = [{'user_id': 38836, 'id': 272922, 'submission_id': None, 'closed_at': '2017-04-29T12:54:52.081Z', 'created_at': '2017-04-29T11:54:52.089Z', 'updated_at': '2017-04-29T11:54:52.089Z', 'status': 'available', 'submission_request_projects': [{'project_id': 83, 'language': 'pt-br'}, {'project_id': 8, 'language': 'pt-br'}, {'project_id': 47, 'language': 'pt-br'}, {'project_id': 151, 'language': 'pt-br'}, {'project_id': 134, 'language': 'pt-br'}, {'project_id': 145, 'language': 'pt-br'}]}]
+    with mock.patch.object(datetime, 'datetime', mock.Mock(wraps=datetime.datetime)) as patched:
+        patched.now.return_value = datetime.datetime(2017, 4, 29, 19, 31, 23, 361331)
+        assert True is assigner.needs_refresh(active_requests)
+
+
+def test_return_true_if_a_request_have_more_than_one_hour_of_life_and_it_needs_refresh(assigner):
+    active_requests = [{'user_id': 38836, 'id': 272922, 'submission_id': None, 'closed_at': '2017-04-29T12:54:52.081Z', 'created_at': '2017-04-29T11:54:52.089Z', 'updated_at': '2017-04-29T11:54:52.089Z', 'status': 'available', 'submission_request_projects': [{'project_id': 83, 'language': 'pt-br'}, {'project_id': 8, 'language': 'pt-br'}, {'project_id': 47, 'language': 'pt-br'}, {'project_id': 151, 'language': 'pt-br'}, {'project_id': 134, 'language': 'pt-br'}, {'project_id': 145, 'language': 'pt-br'}]}]
+    with mock.patch.object(datetime, 'datetime', mock.Mock(wraps=datetime.datetime)) as patched:
+        patched.now.return_value = datetime.datetime(2017, 4, 29, 13, 15, 23, 361331)
+        assert False is assigner.needs_refresh(active_requests)
